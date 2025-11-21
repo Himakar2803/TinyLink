@@ -1,4 +1,4 @@
-const API = "https://tinylink-1-b6zq.onrender.com";
+const API = "https://tinylink-1-b6zq.onrender.com";  // <-- your backend
 
 // Create Short Link
 function createLink() {
