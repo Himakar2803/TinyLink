@@ -1,24 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>TinyLink Stats</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinyLink – Stats</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #22c55e22, #020617 55%);
+      color: #e5e7eb;
+      padding: 16px;
+    }
+    .card {
+      max-width: 420px;
+      width: 100%;
+      background: #020617;
+      border-radius: 18px;
+      padding: 18px 20px 20px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .small {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+    .row {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .label {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .value {
+      font-size: 14px;
+      color: #e5e7eb;
+      word-break: break-all;
+    }
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
 <body>
 
-<h2>📈 Link Stats</h2>
-<p id="info"></p>
+  <div class="card">
+    <h2>📊 TinyLink Stats</h2>
+    <div class="small" id="hint">Loading stats…</div>
 
-<script>
-  const API = "https://tinylink-1-b6zq.onrender.com";
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+    <div id="statsBody" style="display:none;">
+      <div class="row">
+        <div class="label">Code</div>
+        <div class="value" id="codeVal"></div>
+      </div>
+      <div class="row">
+        <div class="label">Target URL</div>
+        <div class="value" id="targetVal"></div>
+      </div>
+      <div class="row">
+        <div class="label">Total Clicks</div>
+        <div class="value" id="clicksVal"></div>
+      </div>
+      <div class="row">
+        <div class="label">Last Clicked</div>
+        <div class="value" id="lastVal"></div>
+      </div>
+    </div>
 
-  fetch(`${API}/api/links`)
-    .then(res => res.json())
-    .then(data => {
-      const link = data.find(i => i.code === code);
-      document.getElementById("info").innerText =
-        link ? (`URL: ${link.target} | Clicks: ${link.clicks}`) : "Not Found";
-    });
-</script>
+    <a class="back" href="index.html">⬅ Back to dashboard</a>
+  </div>
 
+  <script>
+    const API = "https://tinylink-1-b6zq.onrender.com"; // same backend
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    const hint = document.getElementById("hint");
+    const body = document.getElementById("statsBody");
+
+    if (!code) {
+      hint.textContent = "No code provided in URL.";
+    } else {
+      fetch(\`\${API}/api/links\`)
+        .then(res => res.json())
+        .then(data => {
+          const link = data.find(item => item.code === code);
+          if (!link) {
+            hint.textContent = "Code not found in database.";
+            return;
+          }
+          document.getElementById("codeVal").textContent = link.code;
+          document.getElementById("targetVal").innerHTML =
+            '<a href="' + link.target + '" target="_blank">' + link.target + '</a>';
+          document.getElementById("clicksVal").textContent = link.clicks ?? 0;
+          document.getElementById("lastVal").textContent =
+            link.last_clicked || "Never";
+
+          hint.style.display = "none";
+          body.style.display = "block";
+        })
+        .catch(() => {
+          hint.textContent = "Error loading stats. Try again later.";
+        });
+    }
+  </script>
 </body>
 </html>
