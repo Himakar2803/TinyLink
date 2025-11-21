@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TinyLink Dashboard</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+.container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+input, button { padding: 10px; margin: 5px; font-size: 16px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+table, th, td { border: 1px solid gray; }
+th, td { padding: 8px; text-align: center; }
+button { cursor: pointer; }
+a { color: blue; text-decoration: none; }
+.delete { color: red; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🔗 TinyLink URL Shortener</h2>
+
+  <label>Enter URL: </label><br>
+  <input type="text" id="targetUrl" placeholder="https://example.com"><br>
+
+  <label>Custom Code (optional): </label><br>
+  <input type="text" id="customCode" placeholder="ex: abc123"><br>
+
+  <button onclick="createLink()">Create Short Link</button>
+
+  <p id="msg"></p>
+
+  <h3>📌 All Short Links</h3>
+  <table>
+    <thead><tr><th>Code</th><th>Target</th><th>Clicks</th><th>Delete</th></tr></thead>
+    <tbody id="linksTable"></tbody>
+  </table>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
